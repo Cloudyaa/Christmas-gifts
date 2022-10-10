@@ -1,48 +1,42 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
+import express from "express";
+import "express-async-errors";
+import {engine} from "express-handlebars";
+import methodOverride from "method-override";
+import {homeRouter} from "./routes/home.js";
+import {childsRouter} from "./routes/childs.js";
+import {giftsRouter} from "./routes/gifts.js";
+import {handleError} from "./utils/errors.js";
+import "./utils/db.js";
+import {handlebarsHelpers} from "./utils/handlebarsHelpers.js";
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
-var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+const app = express();
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(sassMiddleware({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  indentedSyntax: true, // true = .sass and false = .scss
-  sourceMap: true
+app.use(methodOverride('_method'));
+app.use(express.urlencoded({
+  extended: true,
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+//app.use(express.json());
+app.engine('.hbs', engine({
+    extname: '.hbs',
+    helpers: handlebarsHelpers,
+}));
+app.set('view engine', '.hbs');
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use('/', homeRouter);
+app.use('/childs', childsRouter);
+app.use('/gifts', giftsRouter);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(handleError);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
 
-module.exports = app;
+
+app.listen(3000, 'localhost', () => {
+      console.log('Listening on http://localhost:3000');
+    }
+);
+
+

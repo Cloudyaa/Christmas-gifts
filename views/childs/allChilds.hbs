@@ -1,0 +1,26 @@
+<section class="childs">
+    <h1>All childs</h1>
+
+    {{> input route="childs" placeholder="New children" gifts=false}}
+
+
+    {{#each children}}
+        <div class="m-auto d-flex justify-content-between">
+            <form action="/childs/gift/{{this.id}}?_method=PATCH" method="POST">
+                <label>
+                    {{this.name}}
+                    <select name="giftId">
+                        <option value="">None</option>
+                        {{#each ../gifts }}
+                            <option value="{{this.id}}"
+                                    {{#if (equals this.id ../giftId)}}selected="selected"{{/if}}>{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+                <button class="btn btn-outline-info">Save</button>
+            </form>
+        </div>
+        <br>
+    {{/each}}
+    {{> backHome }}
+</section>

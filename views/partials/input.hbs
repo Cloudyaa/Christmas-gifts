@@ -1,0 +1,7 @@
+<form action="/{{route}}" method="post" class="input">
+    <input id="name" type="text" name="name" placeholder="{{placeholder}}"/>
+    {{#if gifts}}
+        <input id="qty" type="number" name="qty" placeholder="quantity"/>
+    {{/if}}
+    <button type="submit">Add</button>
+</form>

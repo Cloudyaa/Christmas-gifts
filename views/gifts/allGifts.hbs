@@ -1,0 +1,15 @@
+<section class="gifts">
+    <h1>All gifts</h1>
+
+    {{> input route="gifts" placeholder="New gift" gifts=true }}
+
+    <ul>
+        {{#each gifts}}
+            <li>
+                {{this.name}} ({{this.qty}} pcs)
+            </li>
+            <br>
+        {{/each}}
+    </ul>
+    {{> backHome }}
+</section>

@@ -1,0 +1,18 @@
+@import '../helpers/colors';
+
+body {
+  background-color: $bg-main;
+  overflow-x: hidden;
+}
+
+
+
+section {
+  h1, form {
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+
+
