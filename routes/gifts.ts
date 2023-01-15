@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { GiftRecord } from "../records/gift.record.js";
+import { GiftRecord } from "../records/gift.record";
 
 export const giftsRouter = Router();
 

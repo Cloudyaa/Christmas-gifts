@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {ChildRecord} from "../records/child.record.js";
-import {GiftRecord} from "../records/gift.record.js";
+import {ChildRecord} from "../records/child.record";
+import {GiftRecord} from "../records/gift.record";
 
 export const homeRouter = Router();
 

@@ -10,7 +10,7 @@
                 <label>
                     {{this.name}}
                     <select name="giftId">
-                        <option value="">None</option>
+                        <option value=" ">None</option>
                         {{#each ../gifts }}
                             <option value="{{this.id}}"
                                     {{#if (equals this.id ../giftId)}}selected="selected"{{/if}}>{{this.name}}</option>

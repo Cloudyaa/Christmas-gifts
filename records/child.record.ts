@@ -1,9 +1,16 @@
-import {pool} from "../utils/db.js";
-import {ValidationError} from "../utils/errors.js";
+import {pool} from "../utils/db";
+import {ValidationError} from "../utils/errors";
 import {v4 as uuid} from "uuid";
+import {FieldPacket} from "mysql2";
+
+type ChildRecordResults = [ChildRecord[], FieldPacket[]];
 
 export class ChildRecord {
-    constructor(obj) {
+    public giftId: string;
+    public id?: string;
+    public name: string;
+
+    constructor(private obj: ChildRecord) {
         if(!obj.name || obj.name.length < 3 || obj.name.length > 55){
             throw new ValidationError('Name of children should be between 3 - 25 characters');
         }
@@ -12,7 +19,7 @@ export class ChildRecord {
         this.giftId = obj.giftId;
     }
 
-    async insert(){
+    async insert(): Promise<string>{
         if(!this.id){
             this.id = uuid();
         }
@@ -25,7 +32,7 @@ export class ChildRecord {
         return this.id;
     }
 
-    async update(){
+    async update(): Promise<void>{
         await pool.execute("UPDATE `children` SET `name` = :name, `giftId` = :giftId WHERE `id` = :id",{
             id: this.id,
             name: this.name,
@@ -33,19 +40,18 @@ export class ChildRecord {
 
         });
 
-        return this.id;
+       // return this.id;
     }
 
-    static async listAll(){
-        const [results] = await pool.execute("SELECT * FROM `children` ORDER BY `name` ASC");
+    static async listAll(): Promise<ChildRecord[]>{
+        const [results] = await pool.execute("SELECT * FROM `children` ORDER BY `name` ASC") as ChildRecordResults ;
         return results.map(obj => new ChildRecord(obj));
     }
 
-    static async getOne(id){
+    static async getOne(id: string): Promise<ChildRecord> | null{
         const [results] = await pool.execute("SELECT * FROM `children` WHERE `id` = :id", {
             id,
-        });
+        }) as ChildRecordResults;
         return results.length === 0 ? null : new ChildRecord(results[0]);
     }
-
 }

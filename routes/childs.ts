@@ -1,7 +1,7 @@
-import { Router } from "express";
-import {ChildRecord} from "../records/child.record.js";
-import {GiftRecord} from "../records/gift.record.js";
-import {ValidationError} from "../utils/errors.js";
+import {Router} from "express";
+import {ChildRecord} from "../records/child.record";
+import {GiftRecord} from "../records/gift.record";
+import {ValidationError} from "../utils/errors";
 
 export const childsRouter = Router();
 
@@ -26,11 +26,13 @@ childsRouter
 
     .patch('/gift/:childId', async (req, res) => {
         const child = await ChildRecord.getOne(req.params.childId);
+
         if(child === null){
             throw new ValidationError('There is no child with given ID');
         }
 
-        const gift = req.body.giftId === '' ? null : await GiftRecord.getOne(req.body.giftId);
+        const gift = req.body.giftId === ' ' ? null : await GiftRecord.getOne(req.body.giftId);
+
 
         if(gift){
            if(gift.qty <= await gift.countGivenGifts()){
