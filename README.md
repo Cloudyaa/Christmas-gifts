@@ -1,2 +1,2 @@
 # christmas-gifts
- Express.js and MySQL project
+TypeScript and MySQL project which will be refactored to React.
